@@ -1,0 +1,27 @@
+{
+  "name": "artemis-express",
+  "version": "1.0.0",
+  "description": "Backend for artemis",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DylanWatson/artemis-express.git"
+  },
+  "author": "Dylan Watson",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DylanWatson/artemis-express/issues"
+  },
+  "homepage": "https://github.com/DylanWatson/artemis-express#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.3",
+    "method-override": "^2.3.10",
+    "mongoose": "^4.7.6",
+    "morgan": "^1.9.0",
+    "npm": "^6.0.0"
+  }
+}
