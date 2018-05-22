@@ -117,7 +117,7 @@ routes.route('/addBurntCalories/:id').post(function (req, res, next) {
     } else {
       console.log("User found")
       user.burnedCalories = user.burnedCalories + req.body.burnedCalories
-      user.finished = user.calorieGoal-user.burnedCalories === 0
+      user.finished = user.calorieGoal-user.burnedCalories <= 0
       console.log(user)
 
       user.$__save({},
