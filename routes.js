@@ -6,6 +6,8 @@ var routes = express.Router()
 
 var User = require('./User')
 
+var jwt = require('jwt-simple');
+
 
 routes.route('/all').get(function (req, res, next) {
   User.find(function (err, users) {
@@ -27,18 +29,26 @@ routes.route('/get/:id').get(function (req, res, next) {
   })
 })
 
+routes.route('/login').post(function (req, res, next) {
+    var token = jwt.encode(payload, secret);
+    console.log(token);
+    res.json(token) // return all todos
+  })
+
 routes.route('/add').post(function (req, res) {
   User.create(
     {
       name: req.body.name,
       calorieGoal: req.body.calorieGoal,
-      finished: req.body.finished
+      burnedCalories: req.body.burnedCalories,
+      finished: req.body.finished,
+      fitbit: req.body.fitbit
     },
-    function (error, day) {
+    function (error, user) {
       if (error) {
         res.status(400).send('Unable to create User')
       }
-      res.status(200).json(day)
+      res.status(200).json(user)
     }
   )
 })
@@ -71,6 +81,33 @@ routes.route('/update/:id').post(function (req, res, next) {
   })
 })
 
+routes.route('/reset/:id').post(function (req, res, next) {
+  var id = req.params.id
+  User.findById(id, function (error, user) {
+    if (error) {
+      console.log("User not found");
+      return next(new Error('User was not found'))
+    } else {
+      console.log("User found")
+      user.burnedCalories = 0
+      user.finished = false
+      console.log(user)
+
+      user.$__save({},
+        function (error, user)
+        {
+          if (error) {
+            console.log("ERROR")
+            res.status(400).send('Unable to update user')
+          } else {
+            console.log("NO ERROR")
+            res.status(200).json(user)
+          }
+        })
+    }
+  })
+})
+
 routes.route('/addBurntCalories/:id').post(function (req, res, next) {
   var id = req.params.id
   User.findById(id, function (error, user) {
@@ -79,8 +116,8 @@ routes.route('/addBurntCalories/:id').post(function (req, res, next) {
       return next(new Error('User was not found'))
     } else {
       console.log("User found")
-      user.calorieGoal = calculateCaloriesLeft(user.calorieGoal, req.body.burntCalories)
-      user.finished = user.calorieGoal === 0
+      user.burnedCalories = user.burnedCalories + req.body.burnedCalories
+      user.finished = user.calorieGoal-user.burnedCalories === 0
       console.log(user)
 
       user.$__save({},

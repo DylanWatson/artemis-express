@@ -36,6 +36,10 @@ console.log('App listening on port ' + port)
 
 var routes = require('./Routes')
 
+var resetUsers = require('./Reset')
+
+//resetUsers.reset()
+
 //  Use routes defined in Route.js and prefix it with api
 app.use('/api', routes)
 

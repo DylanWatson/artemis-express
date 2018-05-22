@@ -11,7 +11,15 @@ var user = new mongoose.Schema({
     type: Number
   },
 
+  burnedCalories: {
+    type: Number
+  },
+
   finished: {
+    type: Boolean
+  },
+
+  fitbit: {
     type: Boolean
   }
 },
